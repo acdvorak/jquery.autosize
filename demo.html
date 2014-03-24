@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Auto-Resizing Text Box</title>
+
+        <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" />
+        <style>
+input {
+    border: 3px solid black;
+    padding: 20px;
+    font: 24px Arial;
+    min-width: 100px;
+    max-width: 300px;
+}
+        </style>
+    </head>
+    <body>
+
+        <div>
+            <input type="text" autofocus /> <code>min-width: 100px; max-width: 300px;</code>
+        </div>
+
+        <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+        <script src="src/jquery.autowidth.js"></script>
+        <script>
+$(function() {
+    $('input').autoWidth();
+});
+        </script>
+
+    </body>
+</html>
