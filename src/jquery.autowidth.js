@@ -6,40 +6,40 @@
 			_DEFAULTS = {
 				numPaddingChars: 1,
 				numPaddingLines: 0
+			},
+			_BUGS = {
+				/** @type {boolean} */
+				textareaWidth: (function() {
+					var testElem = $('<div/>');
+
+					testElem.css({
+						display: 'block',
+						position: 'absolute',
+						top: '-999em',
+						left: '-999em',
+
+						width: '235px',
+						'font-size': '24px',
+						'font-family': 'Arial',
+						'overflow-y': 'scroll'
+					});
+
+					testElem.appendTo(document.body);
+
+					// Dummy text that is known to trigger the bug in IE8 w/ Arial @ 24px
+					var testText = 'asd asdlkjasd asdlk';
+
+					testElem.text(testText);
+					var preHeight = testElem.height();
+
+					testElem.text(testText + '.');
+					var postHeight = testElem.height();
+
+					testElem.remove();
+
+					return (postHeight > preHeight);
+				}())
 			};
-
-		var _rNumeric = /^\d+$/;
-
-		/**
-		 * Determines if the given string contains an integer value (i.e., only numeric digits).
-		 * @param {string} str
-		 * @returns {boolean}
-		 * @private
-		 */
-		var _isInteger = function(str) {
-			return _rNumeric.test(str);
-		};
-
-		// TODO: This can probably be removed
-		/**
-		 * Determines if the given object contains a valid CSS property with the specified name.
-		 * @param {CSSStyleDeclaration|Object} obj CSS property map.
-		 * @param {string} propName CSS property name.
-		 * @returns {boolean}
-		 * @private
-		 */
-		var _isValidCssProp = function(obj, propName) {
-			if (obj.hasOwnProperty && !obj.hasOwnProperty(propName)) {
-				return false;
-			}
-			if (_isInteger(propName)) {
-				return false;
-			}
-			if (!_.isString(obj[propName])) {
-				return false;
-			}
-			return true;
-		};
 
 		/**
 		 * Generates a padding string with the specified number of characters.  The returned string can be used to
@@ -113,9 +113,7 @@
 			var computedStyles = _getComputedStyles(srcEl);
 			var styles = {};
 			for (var prop in computedStyles) {
-				if (_isValidCssProp(computedStyles, prop)) {
-					styles[prop] = computedStyles[prop];
-				}
+				styles[prop] = computedStyles[prop];
 			}
 			destEl.css(styles);
 		};
@@ -175,40 +173,6 @@
 			});
 		};
 
-		var _BUGS = {
-			/** @type {boolean} */
-			textareaWidth: (function() {
-				var testElem = $('<div/>');
-
-				testElem.css({
-					display: 'block',
-					position: 'absolute',
-					top: '-999em',
-					left: '-999em',
-
-					width: '235px',
-					'font-size': '24px',
-					'font-family': 'Arial',
-					'overflow-y': 'scroll'
-				});
-
-				testElem.appendTo(document.body);
-
-				// Dummy text that is known to trigger the bug in IE8 w/ Arial @ 24px
-				var testText = 'asd asdlkjasd asdlk';
-
-				testElem.text(testText);
-				var preHeight = testElem.height();
-
-				testElem.text(testText + '.');
-				var postHeight = testElem.height();
-
-				testElem.remove();
-
-				return (postHeight > preHeight);
-			}())
-		};
-
 		/**
 		 * Automatically resizes the given input so that it is tall enough to fit its input value.
 		 * @param {jQuery} input
@@ -216,11 +180,7 @@
 		 * @private
 		 */
 		var _autoResizeHeight = function(input, paddingStr) {
-			$('.offscreen').remove();
-
 			var offscreen = $('<div/>');
-
-			offscreen.addClass('offscreen');
 
 			_setComputedStylesFrom(offscreen, input);
 

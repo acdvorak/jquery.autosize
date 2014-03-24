@@ -6,27 +6,20 @@
 
         <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" />
         <style>
-input {
-    border: 3px solid black;
-    padding: 20px;
-    font: 24px Arial;
-    min-width: 100px;
-    max-width: 300px;
-}
-
-textarea {
-    border: 3px solid black;
-    padding: 0px;
-    font: 24px Arial;
-    min-height: 100px;
-    max-height: 300px;
-}
-
-			.test {
-				border: 3px solid red;
-				overflow-y: scroll;
-				width: 237px;
+			input {
+				border: 3px solid black;
+				padding: 20px;
 				font: 24px Arial;
+				min-width: 100px;
+				max-width: 300px;
+			}
+
+			textarea {
+				border: 3px solid black;
+				padding: 20px;
+				font: 24px Arial;
+				min-height: 100px;
+				max-height: 300px;
 			}
         </style>
     </head>
@@ -40,19 +33,21 @@ textarea {
             <textarea></textarea> <code>min-width: 100px; max-width: 300px;</code>
         </div>
 
-		<div class="test">asd asdlkjasd asdlk.</div>
-
         <script src="http://code.jquery.com/jquery-1.11.0.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
         <script src="src/jquery.autowidth.js"></script>
         <script>
-$(function() {
+			$(function() {
+				// TODO: Set Box Model CSS property
+				$('input').autoWidth();
+				$('textarea').autoHeight();
 
-
-	// TODO: Set Box Model CSS property
-    $('input').autoWidth();
-    $('textarea').autoHeight();
-});
+//				setInterval(function() {
+//					$('input, textarea').each(function() {
+//						$(this).width($(this).width() + 1);
+//					});
+//				}, 3000);
+			});
         </script>
 
     </body>

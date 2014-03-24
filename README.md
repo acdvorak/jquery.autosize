@@ -52,3 +52,9 @@ $('textarea').autoHeight({
 	numPaddingLines: 1
 });
 ```
+
+Caveats
+=======
+
+*   Breaks undo/redo in IE 8.  See [jQuery UI bug #7873](http://bugs.jqueryui.com/ticket/7873).
+	> IE won't allow [you] to perform <kbd>CTRL</kbd> + <kbd>Z</kbd> (undo) immediately after a DOM append or `innerHTML` operation.
