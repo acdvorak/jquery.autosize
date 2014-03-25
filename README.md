@@ -1,9 +1,9 @@
-jQuery autoWidth Plugin
-=======================
+jQuery autoSize Plugin
+======================
 
 Automatically resizes `<input>` and `<textarea>` elements as the user types to fit the entire value.
 
-Respects `min/max-width` and every other CSS property you can imagine because the element's computed
+Respects `min/max-width/height` and every other CSS property you can imagine because the element's computed
 CSS properties are copied verbatim to a dummy offscreen `<div>` for measuring.
 
 Dependencies
