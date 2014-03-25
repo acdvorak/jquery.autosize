@@ -1,3 +1,11 @@
+/*!
+ * jQuery autoSize Plugin
+ * https://github.com/acdvorak/jquery.autosize
+ *
+ * Copyright 2014 Andrew C. Dvorak <andy@andydvorak.net>
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ */
 (function(root) {
 
     (function(_, $) {
