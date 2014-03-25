@@ -4,13 +4,17 @@
 
         var _createOffscreenElem = function() {
             var elem = $('<div/>');
+            _positionOffscreen(elem);
+            return elem;
+        };
+
+        var _positionOffscreen = function(elem) {
             elem.css({
                 // Remove from normal flow to avoid causing any page flicker
                 position: 'absolute',
                 top: '-999em',
                 left: '-999em'
             });
-            return elem;
         };
 
         var _EVENT_NAMES = document.createElement('input').oninput === null ? 'input' : 'keydown keyup change',
@@ -135,6 +139,8 @@
 
             _setComputedStylesFrom(offscreen, input);
 
+            _positionOffscreen(offscreen);
+
             offscreen.css({
                 width: 'auto',
                 'white-space': 'pre'
@@ -185,6 +191,8 @@
             var offscreen = _createOffscreenElem();
 
             _setComputedStylesFrom(offscreen, input);
+
+            _positionOffscreen(offscreen);
 
             // If the last line of input ends with a newline, browsers will ignore it and our calculation will be off
             // (one line too short).
