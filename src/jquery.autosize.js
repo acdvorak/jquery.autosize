@@ -2,6 +2,17 @@
 
     (function(_, $) {
 
+        var _createOffscreenElem = function() {
+            var elem = $('<div/>');
+            elem.css({
+                // Remove from normal flow to avoid causing any page flicker
+                position: 'absolute',
+                top: '-999em',
+                left: '-999em'
+            });
+            return elem;
+        };
+
         var _EVENT_NAMES = document.createElement('input').oninput === null ? 'input' : 'keydown keyup change',
             _DEFAULTS = {
                 numPaddingChars: 1,
@@ -10,14 +21,9 @@
             _BUGS = {
                 /** @type {boolean} */
                 textareaWidth: (function() {
-                    var testElem = $('<div/>');
+                    var testElem = _createOffscreenElem();
 
                     testElem.css({
-                        display: 'block',
-                        position: 'absolute',
-                        top: '-999em',
-                        left: '-999em',
-
                         width: '235px',
                         'font-size': '24px',
                         'font-family': 'Arial',
@@ -125,15 +131,11 @@
          * @private
          */
         var _autoResizeWidth = function(input, paddingStr) {
-            var offscreen = $('<div/>');
+            var offscreen = _createOffscreenElem();
 
             _setComputedStylesFrom(offscreen, input);
 
             offscreen.css({
-                display: 'block',
-                position: 'absolute',
-                top: '-999em',
-                left: '-999em',
                 width: 'auto',
                 'white-space': 'pre'
             });
@@ -180,7 +182,7 @@
          * @private
          */
         var _autoResizeHeight = function(input, paddingStr) {
-            var offscreen = $('<div/>');
+            var offscreen = _createOffscreenElem();
 
             _setComputedStylesFrom(offscreen, input);
 
@@ -189,13 +191,6 @@
             var normVal = (input.val() + paddingStr).replace(/\n$/g, '\n.');
 
             offscreen.css({
-                display: 'block',
-
-                // Remove from normal flow to avoid causing any page flicker
-                position: 'absolute',
-                top: '-999em',
-                left: '-999em',
-
                 // Allow height to expand as needed
                 height: 'auto',
 
