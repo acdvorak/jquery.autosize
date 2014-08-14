@@ -28,7 +28,9 @@
         var _SUPPORT = {
                 inputEvent: document.createElement('input').oninput === null
             },
-            _EVENT_NAMES = _SUPPORT.input ? 'input' : 'keydown keyup change',
+            _EVENT_SPACE = '.autosize',
+            _EVENT_TYPES = _SUPPORT.inputEvent ? 'input' : 'keydown keyup change',
+            _EVENT_NAMES = _EVENT_TYPES.split(' ').join(_EVENT_SPACE + ' ') + _EVENT_SPACE,
             _DEFAULTS = {
                 numPaddingChars: 1,
                 numPaddingLines: 0
@@ -247,7 +249,7 @@
                         _autoResizeHeight(input, paddingStr);
                     };
 
-                input.on(_EVENT_NAMES, function(e) {
+                input.off(_EVENT_NAMES).on(_EVENT_NAMES, function(e) {
                     // Modern browsers
                     if (e.type === 'input') {
                         resize();
