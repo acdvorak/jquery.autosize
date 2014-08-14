@@ -20,12 +20,15 @@
             elem.css({
                 // Remove from normal flow to avoid causing any page flicker
                 position: 'absolute',
-                top: '-999em',
-                left: '-999em'
+                top:      '-999em',
+                left:     '-999em'
             });
         };
 
-        var _EVENT_NAMES = document.createElement('input').oninput === null ? 'input' : 'keydown keyup change',
+        var _SUPPORT = {
+                inputEvent: document.createElement('input').oninput === null
+            },
+            _EVENT_NAMES = _SUPPORT.input ? 'input' : 'keydown keyup change',
             _DEFAULTS = {
                 numPaddingChars: 1,
                 numPaddingLines: 0
@@ -36,10 +39,10 @@
                     var testElem = _createOffscreenElem();
 
                     testElem.css({
-                        width: '235px',
-                        'font-size': '24px',
+                        'width':       '235px',
+                        'font-size':   '24px',
                         'font-family': 'Arial',
-                        'overflow-y': 'scroll'
+                        'overflow-y':  'scroll'
                     });
 
                     testElem.appendTo(document.body);
@@ -150,7 +153,7 @@
             _positionOffscreen(offscreen);
 
             offscreen.css({
-                width: 'auto',
+                'width':       'auto',
                 'white-space': 'pre'
             });
 
@@ -212,7 +215,7 @@
 
                 // Force <div> to behave like a <textarea>
                 'white-space': 'pre-wrap',
-                'word-wrap': 'break-word'
+                'word-wrap':   'break-word'
             });
 
             offscreen.appendTo(document.body);
