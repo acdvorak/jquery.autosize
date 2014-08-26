@@ -253,8 +253,8 @@
                 'word-wrap':   'break-word'
             });
 
-            offscreen.appendTo(document.body);
             offscreen.text(normVal);
+            offscreen.appendTo(document.body);
 
             // Prevents vertical scrollbars from goofing shit up.
             // IE8 (naturally) treats textareas and divs differently when calculating width and scrollbar allowance,
