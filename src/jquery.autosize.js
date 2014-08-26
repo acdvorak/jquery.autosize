@@ -130,11 +130,13 @@
          * @private
          */
         var _getComputedStyles = function(el) {
-            if (!el)
+            if (!el) {
                 return {};
+            }
 
-            if (el.jquery)
+            if (el.jquery) {
                 el = el[0];
+            }
 
             var styles;
 
