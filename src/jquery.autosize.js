@@ -155,10 +155,6 @@
                 el = el[0];
             }
 
-            var styles;
-
-            // Modern browsers, IE9+
-
             var styles = _getComputedStylesModern(el) // Modern browsers, IE9+
                       || el.currentStyle              // IE8
                       || el.style                     // Fall back to inline styles
