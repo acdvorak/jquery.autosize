@@ -174,6 +174,7 @@
          * Modern browsers, IE9+.
          * @param  {HTMLElement} el DOM element
          * @return {Object|null}
+         * @private
          */
         var _getComputedStylesModern = function(el) {
             if (!_SUPPORT.getComputedStyle) {
