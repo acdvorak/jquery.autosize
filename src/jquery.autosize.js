@@ -10,11 +10,16 @@
 
     (function(_, $) {
 
-        var _toString       = Object.prototype.toString,
-            _hasOwnProperty = Object.prototype.hasOwnProperty;
+        var _toString = function(obj) {
+            return Object.prototype.toString.call(obj);
+        };
+
+        var _hasOwnProperty = function(obj, propName) {
+            return Object.prototype.hasOwnProperty.call(obj, propName);
+        };
 
         var _isFunction = function(val) {
-            return !!val && (typeof val === 'function' || _toString.call(val) === '[object Function]');
+            return !!val && (typeof val === 'function' || _toString(val) === '[object Function]');
         };
 
         var _createOffscreenElem = function() {
@@ -116,6 +121,25 @@
             return styles;
         };
 
+        // DispHTMLCurrentStyle IE8 Unspecified error on outline and outlineWidth
+        /**
+         * IE8 throws an "Unspecified error" when you try to access the
+         * 'outline' or 'outlineWidth' properties of a DispHTMLCurrentStyle
+         * object.  Moving the try/catch to a separate function allows
+         * sane browsers to better optimize the calling function.
+         * @param  {DispHTMLCurrentStyle|Object} obj      A DOM element's currentStyle
+         * @param  {String}                      propName Name of the property to access on the object.
+         * @return {String|null}
+         * @private
+         */
+        var _tryGetPropValue = function(obj, propName) {
+            try {
+                return obj[propName];
+            } catch (e) {
+                return null;
+            }
+        };
+
         /**
          * Returns a POJO containing all properties from `obj` *EXCEPT*
          * prototype and function properties.
@@ -125,19 +149,22 @@
          * @private
          */
         var _sanitizeObject = function(obj) {
-            var str = JSON.stringify(obj);
+            var json = JSON.stringify(obj);
 
             // Modern browsers, IE9+
-            if (str) {
-                return JSON.parse(str);
+            if (json) {
+                return JSON.parse(json);
             }
 
             // IE8
-            var sanitized = {};
+            var sanitized = {},
+                val;
             for (var prop in obj) {
+                val = _tryGetPropValue(obj, prop);
+
                 // Exclude prototype and function properties
-                if (_hasOwnProperty.call(obj, prop) && !_isFunction(obj[prop])) {
-                    sanitized[prop] = obj[prop];
+                if (val !== null && _hasOwnProperty(obj, prop) && !_isFunction(val)) {
+                    sanitized[prop] = val;
                 }
             }
             return sanitized;
