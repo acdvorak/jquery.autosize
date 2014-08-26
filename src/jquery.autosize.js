@@ -171,12 +171,7 @@
          * @private
          */
         var _setComputedStylesFrom = function(destEl, srcEl) {
-            var computedStyles = _getComputedStyles(srcEl);
-            var styles = {};
-            for (var prop in computedStyles) {
-                styles[prop] = computedStyles[prop];
-            }
-            destEl.css(styles);
+            destEl.css(_getComputedStyles(srcEl));
         };
 
         /**
