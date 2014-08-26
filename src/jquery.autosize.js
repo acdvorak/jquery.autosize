@@ -123,8 +123,25 @@
         };
 
         /**
+         * Modern browsers, IE9+.
+         * @param  {HTMLElement} el DOM element
+         * @return {Object|null}
+         */
+        var _getComputedStylesModern = function(el) {
+            if (!_SUPPORT.getComputedStyle) {
+                return null;
+            }
+
+            // This notation, though verbose, is necessary to support Firefox 3.6 / 4
+            // See https://developer.mozilla.org/en-US/docs/Web/API/Window.getComputedStyle
+            var computed = document.defaultView.getComputedStyle(el, null);
+
+            return computed ? _cssStyleDeclToObject(computed) : null;
+        };
+
+        /**
          * Gets the computed CSS styles for the given element.
-         * @param {Element|jQuery} el DOM element or jQuery object to retrieve computed styles for.
+         * @param {HTMLElement|jQuery} el DOM element or jQuery object to retrieve computed styles for.
          * @returns {Object} Hash object containing key-value pairs, where the key is a CSS property name
          *                   and the value is the computed value of that property.
          * @private
@@ -141,18 +158,12 @@
             var styles;
 
             // Modern browsers, IE9+
-            if (_SUPPORT.getComputedStyle) {
-                var computed = document.defaultView.getComputedStyle(el, null);
-                styles = _cssStyleDeclToObject(computed);
-            }
-            // IE8
-            else if (el.currentStyle) {
-                styles = el.currentStyle;
-            }
-            // Inline styles
-            else {
-                styles = el.style;
-            }
+
+            var styles = _getComputedStylesModern(el) // Modern browsers, IE9+
+                      || el.currentStyle              // IE8
+                      || el.style                     // Fall back to inline styles
+                      || {}                           // Not a DOM element
+            ;
 
             return _sanitizeObject(styles);
         };
