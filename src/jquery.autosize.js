@@ -102,7 +102,7 @@
                 idx       = propNames.length;
 
             while (idx--) {
-                propName = propNames[idx];
+                propName         = propNames[idx];
                 styles[propName] = computed[propName];
             }
 
@@ -246,7 +246,7 @@
 
             offscreen.css({
                 // Allow height to expand as needed
-                height: 'auto',
+                'height':      'auto',
 
                 // Force <div> to behave like a <textarea>
                 'white-space': 'pre-wrap',
