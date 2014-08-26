@@ -10,6 +10,13 @@
 
     (function(_, $) {
 
+        var _toString       = Object.prototype.toString,
+            _hasOwnProperty = Object.prototype.hasOwnProperty;
+
+        var _isFunction = function(val) {
+            return !!val && (typeof val === 'function' || _toString.call(val) === '[object Function]');
+        };
+
         var _createOffscreenElem = function() {
             var elem = $('<div/>');
             _positionOffscreen(elem);
@@ -110,16 +117,30 @@
         };
 
         /**
-         * Sanitizes the given JavaScript object by serializing it to JSON
-         * and then deserializing it to remove any function or prototype
-         * properties.
+         * Returns a POJO containing all properties from `obj` *EXCEPT*
+         * prototype and function properties.
          * @param  {*} obj Any JSON-serializable object.
          * @return {*} A clone of the input object with all function and
          *             prototype properties removed.
          * @private
          */
         var _sanitizeObject = function(obj) {
-            return JSON.parse(JSON.stringify(obj));
+            var str = JSON.stringify(obj);
+
+            // Modern browsers, IE9+
+            if (str) {
+                return JSON.parse(str);
+            }
+
+            // IE8
+            var sanitized = {};
+            for (var prop in obj) {
+                // Exclude prototype and function properties
+                if (_hasOwnProperty.call(obj, prop) && !_isFunction(obj[prop])) {
+                    sanitized[prop] = obj[prop];
+                }
+            }
+            return sanitized;
         };
 
         /**
