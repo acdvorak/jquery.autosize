@@ -21,12 +21,15 @@
                 // Remove from normal flow to avoid causing any page flicker
                 position: 'absolute',
                 top:      '-999em',
-                left:     '-999em'
+                left:     '-999em',
+                right:    'auto',
+                bottom:   'auto'
             });
         };
 
         var _SUPPORT = {
-                inputEvent: document.createElement('input').oninput === null
+                inputEvent:         (document.createElement('input').oninput === null),
+                getComputedStyle: !!(document.defaultView && document.defaultView.getComputedStyle)
             },
             _EVENT_SPACE = '.autosize',
             _EVENT_TYPES = _SUPPORT.inputEvent ? 'input' : 'keydown keyup change',
@@ -87,43 +90,69 @@
         };
 
         /**
+         * Converts a CSSStyleDeclaration host object to a plain JavaScript object.
+         * @param {CSSStyleDeclaration} computed Computed styles from getComputedStyle().
+         * @returns {Object} Plain JavaScript object containing the styles from `computed`.
+         * @private
+         */
+        var _cssStyleDeclToObject = function(computed) {
+            var styles    = {},
+                propNames = Array.prototype.slice.call(computed),
+                propName,
+                idx       = propNames.length;
+
+            while (idx--) {
+                propName = propNames[idx];
+                styles[propName] = computed[propName];
+            }
+
+            return styles;
+        };
+
+        /**
+         * Sanitizes the given JavaScript object by serializing it to JSON
+         * and then deserializing it to remove any function or prototype
+         * properties.
+         * @param  {*} obj Any JSON-serializable object.
+         * @return {*} A clone of the input object with all function and
+         *             prototype properties removed.
+         * @private
+         */
+        var _sanitizeObject = function(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        };
+
+        /**
          * Gets the computed CSS styles for the given element.
          * @param {Element|jQuery} el DOM element or jQuery object to retrieve computed styles for.
          * @returns {Object} Hash object containing key-value pairs, where the key is a CSS property name
-         * 					 and the value is the computed value of that property.
+         *                   and the value is the computed value of that property.
          * @private
          */
         var _getComputedStyles = function(el) {
-            if (el instanceof jQuery)
+            if (!el)
+                return {};
+
+            if (el.jquery)
                 el = el[0];
 
-            // IE
-            if (el.currentStyle) {
-                return el.currentStyle;
-            }
+            var styles;
 
-            // Firefox
-            if (document.defaultView && document.defaultView.getComputedStyle) {
+            // Modern browsers, IE9+
+            if (_SUPPORT.getComputedStyle) {
                 var computed = document.defaultView.getComputedStyle(el, null);
-
-                if (!computed.hasOwnProperty('length')) {
-                    return computed;
-                }
-
-                var retStyles = {},
-                    idx = computed.length,
-                    propName;
-
-                while (idx--) {
-                    propName = computed[idx];
-                    retStyles[propName] = computed[propName];
-                }
-
-                return retStyles;
+                styles = _cssStyleDeclToObject(computed);
+            }
+            // IE8
+            else if (el.currentStyle) {
+                styles = el.currentStyle;
+            }
+            // Inline styles
+            else {
+                styles = el.style;
             }
 
-            // Get inline style
-            return el.style;
+            return _sanitizeObject(styles);
         };
 
         /**
